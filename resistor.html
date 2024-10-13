@@ -1,0 +1,501 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCB Resistor Information Hub</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --primary-color: #3b82f6;
+            --secondary-color: #1e293b;
+            --accent-color: #f472b6;
+            --box-bg-color: rgba(30, 41, 59, 0.8);
+            --box-border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 2rem;
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        #resistorSelector {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            background-color: var(--box-bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--box-border-color);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233b82f6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em;
+        }
+
+        .bento-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            background-color: var(--box-bg-color);
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .bento-box {
+            background-color: var(--secondary-color);
+            border: 1px solid var(--box-border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .bento-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .bento-box h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .bento-box p, .bento-box ul {
+            margin: 0;
+            line-height: 1.4;
+            font-size: 0.9rem;
+        }
+
+        .bento-box ul {
+            padding-left: 1.25rem;
+        }
+
+        .bento-box.large {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .datasheet-link {
+            display: inline-block;
+            margin-top: 0.75rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .datasheet-link:hover {
+            color: var(--accent-color);
+        }
+
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .bento-container {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 1.5rem;
+                padding: 2rem;
+            }
+
+            .bento-box {
+                padding: 1.5rem;
+            }
+
+            .bento-box h3 {
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+            }
+
+            .bento-box p, .bento-box ul {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+            .bento-box ul {
+                padding-left: 1.5rem;
+            }
+
+            .bento-box.large {
+                grid-template-columns: 2fr 1fr;
+                gap: 1.5rem;
+            }
+
+            .datasheet-link {
+                margin-top: 1rem;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .container {
+                padding: 0.5rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 1rem;
+            }
+
+            #resistorSelector {
+                font-size: 0.9rem;
+                padding: 0.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .bento-container {
+                padding: 0.5rem;
+            }
+
+            .bento-box {
+                padding: 0.75rem;
+            }
+
+            .bento-box h3 {
+                font-size: 1rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .bento-box p, .bento-box ul {
+                font-size: 0.85rem;
+                line-height: 1.3;
+            }
+
+            .bento-box ul {
+                padding-left: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="space-background" id="starsContainer"></div>
+    <div class="container">
+        <h1>Resistor</h1>
+        <select id="resistorSelector">
+            <option value="">Select a Resistor Type</option>
+            <option value="cermet">Cermet Trimmers</option>
+            <option value="aluminum">Aluminum Clad Wirewound Resistors</option>
+            <option value="bulkMetal">Bulk Metal Foil Precision Resistors</option>
+            <option value="carbonFilm">Carbon Film Resistors</option>
+            <option value="melf">MELF Resistors</option>
+            <option value="metal">Metal Film Resistors</option>
+            <option value="Thinfilm">Thin Film Resistors</option>
+            <option value="Thickfilm">Thick Film Resistors</option>
+            <option value="Shunt">Shunt Resistors</option>
+            <option value="Precision">Precision Resistors</option>
+        </select>
+        <div id="resistorInfo" class="bento-container" style="display: none;">
+            <div class="bento-box large">
+                <div>
+                    <h3>Overview & Technical Specifications</h3>
+                    <p id="description"></p>
+                    <ul id="specifications"></ul>
+                </div>
+                <div class="image-container" id="componentImage"></div>
+            </div>
+            <div class="bento-box">
+                <h3>Applications</h3>
+                <p id="applications"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Users</h3>
+                <p id="users"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Advantages</h3>
+                <p id="advantages"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Disadvantages</h3>
+                <p id="disadvantages"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Resources</h3>
+                <p>For detailed specifications, please refer to the datasheet:</p>
+                <a href="#" id="datasheetLink" class="datasheet-link" target="_blank" rel="noopener noreferrer">View Datasheet</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        const resistorData = {
+            cermet: {
+                description: "Cermet trimmers are adjustable resistors used for fine-tuning circuits. They are made from a combination of ceramic and metallic materials, offering good thermal stability and reliability.",
+                applications: "These are used in precision equipment like test instruments, audio circuits, and medical devices where fine-tuning is required.",
+                users: "Used in industries requiring accurate calibration, including telecommunications, aerospace, and audio equipment manufacturers.",
+                specifications: [
+                    "Resistance Range: 10 Ω to 2 MΩ",
+                    "Power Rating: 0.5 W to 1 W",
+                    "Temperature Coefficient: ±100 ppm/°C",
+                    "Operating Temperature: -55°C to +125°C",
+                    "Adjustment Turns: Single turn (6.35mm/11.0mm) or multi-turn (7mm)"
+                ],
+                advantages: "High precision, stability, and small form factor.",
+                disadvantages: "Limited to single adjustments and less durable under frequent use compared to potentiometers.",
+                datasheet: "https://drive.google.com/file/d/1GcGuF-Ta0rBwv4uoQDaslaMO6MCJB-tw/view",
+                image: "/Resistors/cer.webp"
+            },
+            aluminum: {
+                description: "Wirewound resistors encased in an aluminum housing for superior heat dissipation. They use a wire (usually nickel-chromium alloy) wound around a core.",
+                applications: "Power electronics, motor controls, RF circuits, and power supply units, where high wattage and heat dissipation are crucial.",
+                users: "Heavy industries, motor manufacturing, and RF communication companies.",
+                specifications: [
+                    "Resistance Range: 0.1 Ω to 100 kΩ",
+                    "Power Rating: 10 W to 300 W",
+                    "Temperature Coefficient: ±20 ppm/°C to ±100 ppm/°C",
+                    "Operating Temperature: -55°C to +250°C",
+                    "Tolerance: ±1% to ±5%"
+                ],
+                advantages: "High power handling, excellent heat dissipation.",
+                disadvantages: "Bulky and can be inductive due to the wirewound nature, which might cause issues in high-frequency applications.",
+                datasheet: "https://drive.google.com/file/d/1DbP0EOA5BFG9e8AyPBMJtGfL0JF54a_a/view",
+                image: "/Resistors/al.jpeg"
+            },
+            bulkMetal: {
+                description: "These resistors use a metal foil as the resistive element, offering extremely low temperature coefficients and long-term stability. They provide the highest precision available in resistors.",
+                applications: "High-precision applications such as aerospace, medical instruments, and high-end audio systems.",
+                users: "Aerospace companies, precision measurement instrument manufacturers, and audiophiles.",
+                specifications: [
+                    "Resistance Range: 1 Ω to 1 MΩ",
+                    "Tolerance: Down to ±0.001%",
+                    "Temperature Coefficient: As low as ±0.2 ppm/°C",
+                    "Power Rating: 0.1 W to 1 W",
+                    "Long-term Stability: < 5 ppm/year"
+                ],
+                advantages: "Ultra-low temperature coefficient, long-term stability, and accuracy.",
+                disadvantages: "Expensive compared to other resistor types.",
+                datasheet: "https://drive.google.com/file/d/1bj3zoHagwkStuFbqHM_2REmzEBTCYite/view",
+                image: "/Resistors/bulk.webp"
+            },
+            carbonFilm: {
+                description: "These resistors are made by depositing a thin layer of carbon onto a ceramic substrate. They are cheap and widely used.",
+                applications: "General-purpose electronic devices, automotive, consumer electronics, and power supplies.",
+                users: "Electronics manufacturers, automotive suppliers.",
+                specifications: [
+                    "Resistance Range: 1 Ω to 10 MΩ",
+                    "Tolerance: ±5% to ±20%",
+                    "Temperature Coefficient: ±350 ppm/°C to ±500 ppm/°C",
+                    "Power Rating: 0.25 W to 2 W",
+                    "Operating Temperature: -55°C to +155°C"
+                ],
+                advantages: "Low cost, widely available, suitable for general use.",
+                disadvantages: "Poor tolerance and stability compared to metal film or wirewound resistors.",
+                datasheet: "https://drive.google.com/file/d/1am4OASOxCr2k2HEakxyjntF2n5gI6y7d/view",
+                image: "/Resistors/carbon.jpeg"
+            },
+            melf: {
+                description: "Metal Electrode Leadless Face (MELF) resistors are surface-mount resistors that offer better stability and lower failure rates compared to traditional chip resistors.",
+                applications: "High-frequency applications such as RF circuits, automotive electronics, and telecommunications.",
+                users: "Automotive industries, telecommunication companies.",
+                specifications: [
+                    "Resistance Range: 1 Ω to 10 MΩ",
+                    "Tolerance: ±0.1% to ±1%",
+                    "Temperature Coefficient: ±25 ppm/°C to ±100 ppm/°C",
+                    "Power Rating: 0.1 W to 1 W",
+                    "Frequency Range: Up to 40 GHz"
+                ],
+                advantages: "High stability, better thermal performance.",
+                disadvantages: "More expensive and harder to solder due to their cylindrical shape.",
+                datasheet: "https://drive.google.com/file/d/1Zi9kaLvigfWxfOI3hs9qnbRC1WMdsuhS/view",
+                image: "/Resistors/melf.jpeg"
+            },
+            metal: {
+                description: "These resistors consist of a thin metal film deposited on a substrate, providing high accuracy and stability.",
+                applications: "Signal processing, precision applications.",
+                users: "Electronics manufacturers, measurement instrument makers.",
+                specifications: [
+                    "Resistance Range: 1 Ω to 10 MΩ",
+                    "Tolerance: ±1% to ±5%",
+                    "Temperature Coefficient: ±50 ppm/°C to ±100 ppm/°C, stable performance up to +155°C",
+                    "Power Rating: 0.25 W to 2 W",
+                    "Frequency  Range: DC to 1GHz"
+                ],
+                advantages: "Good stability and reliability, low noise.",
+                disadvantages: "Not as high power rated as wirewound resistors.",
+                datasheet: "https://www.vishay.com/docs/28705/mcx0x0xpro.pdf",
+                image: "/Resistors/mfr.jpg"
+            },
+            Thickfilm: {
+                description: "Thick film resistors are made using a thicker layer of resistive material, commonly used in low-cost applications.",
+                applications: "General purpose, automotive, consumer electronics.",
+                users: "Electronics manufacturers, automotive suppliers.",
+                specifications: [
+                    "Resistance Range: 1 Ω to 10 MΩ",
+                    "Tolerance: ±1% to ±20%",
+                    "Temperature Coefficient: ±100 ppm/°C to ±500 ppm/°C",
+                    "Power Rating: 0.1 W to 2 W",
+                    "Frequency Range: DC to 1 GHz"
+                ],
+                advantages: "Cost-effective, widely available.",
+                disadvantages: "Lower precision than thin film; can be less stable.",
+                datasheet: "https://drive.google.com/file/d/1g7nSJFUKzO9xHjiJDHeZC7homB_N3yDg/view",
+                image: "/Resistors/thick.jpg"
+            },
+            Thinfilm: {
+                description: "Thin film resistors are created by depositing a thin layer of resistive material onto a substrate, offering high precision and stability.",
+                applications: "Precision analog circuits, RF applications.",
+                users: "High-end electronics manufacturers, medical device companies.",
+                specifications: [
+                    "Resistance Range: 1 Ω to 10 MΩ",
+                    "Tolerance: ±0.1% to ±1%",
+                    "Temperature Coefficient: ±10 ppm/°C to ±100 ppm/°C",
+                    "Power Rating: 0.1 W to 1 W",
+                    "Frequency Range: DC to 10 GHz"
+                ],
+                advantages: "High precision and stability, low noise.",
+                disadvantages: "More expensive and sensitive to moisture.",
+                datasheet: "https://drive.google.com/file/d/1OE5JA7B4FN1Ct_9yq5EntZmgA0qYetGo/view",
+                image: "/Resistors/thin.webp"
+            },
+            Shunt: {
+                description: "Shunt resistors are low-resistance resistors used to measure current by creating a voltage drop.",
+                applications: "Current sensing in power supplies, automotive applications.",
+                users: "Power supply manufacturers, automotive industries.",
+                specifications: [
+                    "Resistance Range: 0.001 Ω to 1 Ω",
+                    "Tolerance: ±0.5% to ±5%",
+                    "Temperature Coefficient: Typically around ±50 ppm/°C",
+                    "Power Rating: 1 W to 5 W",
+                    "Frequency Range: DC to 1 MHz"
+                ],
+                advantages: "Accurate current sensing, low resistance values.",
+                disadvantages: "Limited range, can generate heat affecting accuracy.",
+                datasheet: "https://drive.google.com/file/d/1YZR-vCnZ0-NcahY7m3FuNw2MkBICWQf8/view",
+                image: "/Resistors/shunt.jpeg"
+            },
+            Precision: {
+                description: "Precision resistors are designed to have very low tolerance and stable resistance values.",
+                applications: "Calibration, test equipment, medical devices.",
+                users: "Calibration labs, medical equipment manufacturers.",
+                specifications: [
+                    "Resistance Range: 1 Ω to 10 MΩ",
+                    "Tolerance: Down to ±0.01%",
+                    "Temperature Coefficient: As low as ±1 ppm/°C",
+                    "Power Rating: 0.1 W to 1 W",
+                    "Frequency Range: DC to 1 GHz"
+                ],
+                advantages: "Extremely high precision, very stable across temperature variations.",
+                disadvantages: "High cost, can be sensitive to environmental changes.",
+                datasheet: "https://drive.google.com/file/d/1_mSTBlRuPjNNzX6BIX2JMm7abH5edyp9/view",
+                image: "/Resistors/precision.jpeg"
+            },
+        };
+
+        const resistorSelector = document.getElementById('resistorSelector');
+        const resistorInfo = document.getElementById('resistorInfo');
+
+        resistorSelector.addEventListener('change', function() {
+            const selectedResistor = resistorSelector.value;
+            if (selectedResistor) {
+                const data = resistorData[selectedResistor];
+                document.getElementById('description').textContent = data.description;
+                document.getElementById('applications').textContent = data.applications;
+                document.getElementById('users').textContent = data.users;
+                document.getElementById('specifications').innerHTML = data.specifications.map(spec => `<li>${spec}</li>`).join('');
+                document.getElementById('advantages').textContent = data.advantages;
+                document.getElementById('disadvantages').textContent = data.disadvantages;
+                document.getElementById('componentImage').innerHTML = `<img src="${data.image}" alt="${selectedResistor} Resistor">`;
+                document.getElementById('datasheetLink').href = data.datasheet;
+                resistorInfo.style.display = 'grid';
+            } else {
+                resistorInfo.style.display = 'none';
+            }
+        });
+
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            const starCount = 100;
+            const fragment = document.createDocumentFragment();
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = star.style.height = `${Math.random() * 3}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                fragment.appendChild(star);
+            }
+
+            starsContainer.appendChild(fragment);
+        }
+
+        createStars();
+    </script>
+</body>
+</html>

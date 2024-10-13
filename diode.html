@@ -1,0 +1,353 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PCB Diode Information Hub</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --primary-color: #3b82f6;
+            --secondary-color: #1e293b;
+            --accent-color: #f472b6;
+            --box-bg-color: rgba(30, 41, 59, 0.8);
+            --box-border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        #diodeSelector {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            background-color: var(--box-bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--box-border-color);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233b82f6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em;
+        }
+
+        .bento-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background-color: var(--box-bg-color);
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .bento-box {
+            background-color: var(--secondary-color);
+            border: 1px solid var(--box-border-color);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .bento-box h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .bento-box p {
+            margin: 0;
+            line-height: 1.4;
+            font-size: 0.9rem;
+        }
+
+        .bento-box.large {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 1rem;
+            aspect-ratio: 16 / 9;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .datasheet-link {
+            display: inline-block;
+            margin-top: 0.5rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 1200px;
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .bento-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 1.5rem;
+                padding: 2rem;
+            }
+
+            .bento-box.large {
+                grid-column: 1 / -1;
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 1.5rem;
+                align-items: start;
+            }
+
+            .bento-box:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+            }
+
+            .image-container {
+                margin-top: 0;
+                aspect-ratio: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="space-background" id="starsContainer"></div>
+    <div class="container">
+        <h1>Diode</h1>
+        <select id="diodeSelector">
+            <option value="">Select a Diode Type</option>
+            <option value="rectifier">Rectifier Diode</option>
+            <option value="zener">Zener Diode</option>
+            <option value="schottky">Schottky Diode</option>
+            <option value="led">Light Emitting Diode (LED)</option>
+            <option value="varactor">Varactor Diode</option>
+            <option value="avalanche">Avalanche Diode</option>
+            <option value="tunnel">Tunnel Diode</option>
+            <option value="scr">Silicon Controlled Rectifiers (SCRs)</option>
+            <option value="gdt">Gas Discharge Tubes (GDTs)</option>
+        </select>
+        <div id="diodeInfo" class="bento-container" style="display: none;">
+            <div class="bento-box large">
+                <div>
+                    <h3>Overview & Technical Specifications</h3>
+                    <p id="description"></p>
+                    <p id="specification"></p>
+                </div>
+                <div class="image-container" id="componentImage"></div>
+            </div>
+            <div class="bento-box">
+                <h3>Applications</h3>
+                <p id="usage"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Industry Standards</h3>
+                <p id="standards"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Future Developments</h3>
+                <p id="futureScope"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Resources</h3>
+                <p>For detailed specifications, please refer to the datasheet:</p>
+                <a href="#" id="datasheetLink" class="datasheet-link" target="_blank" rel="noopener noreferrer">View Datasheet</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        const diodeData = {
+            rectifier: {
+                description: "Rectifier diodes are fundamental components in power electronics, designed to convert alternating current (AC) to direct current (DC). They allow current to flow in one direction while blocking it in the reverse direction, making them crucial in various power supply applications.",
+                usage: "Widely used in power supplies, voltage regulators, and AC to DC conversion circuits. They're essential in battery chargers, solar inverters, and many household electronics.",
+                specification: "• Forward voltage drop: 0.7-1.1V\n• Reverse breakdown voltage: 50-1000V\n• Max forward current: 1-3000A\n• Operating temperature: -55°C to 175°C",
+                standards: "Compliant with MIL-STD-750 and MIL-STD-883 standards for semiconductor device testing. Major manufacturers include Vishay, ON Semiconductor, and STMicroelectronics, adhering to strict quality control measures.",
+                futureScope: "Research is focused on developing high-efficiency, low-loss rectifier diodes. These advancements aim to improve power conversion in renewable energy systems and electric vehicles, contributing to more sustainable energy solutions.",
+                datasheetUrl: "https://drive.google.com/file/d/1BG1Pq8s0H2XHEI_sQULEOjwFVmg9aNwP/view",
+                image: "/anagha/rec.jpg"
+            },
+            zener: {
+                description: "Zener diodes are unique semiconductor devices designed to allow current to flow backwards when a specific voltage is reached. This characteristic makes them invaluable in voltage regulation and protection circuits across various electronic applications.",
+                usage: "Primarily used for voltage regulation, overvoltage protection, and as voltage reference in circuits. They're crucial in stabilizing power supplies and protecting sensitive components from voltage spikes.",
+                specification: "• Zener voltage range: 1.8-200V\n• Power dissipation: 0.25-50W\n• Temperature coefficient: 0.01-0.1%/°C\n• Tolerance: ±1% to ±10%",
+                standards: "Adheres to JESD282B.01 standard for Zener voltage regulators. Key manufacturers like ON Semiconductor, Nexperia, and Micro Commercial Components ensure compliance with industry standards.",
+                futureScope: "Future developments focus on integrating Zener diodes in advanced power management ICs. This integration aims to enhance efficiency in smart grid technologies and IoT devices, contributing to more intelligent and energy-efficient systems.",
+                datasheetUrl: "https://drive.google.com/file/d/1aMKlZxH-nEO1Ic69O8jcpBlPQhmri62u/view",
+                image: "/anagha/zener.jpg"
+            },
+            schottky: {
+                description: "Schottky diodes are distinguished by their use of a metal-semiconductor junction instead of a semiconductor-semiconductor junction. This unique structure results in lower forward voltage drop and faster switching speeds compared to conventional diodes.",
+                usage: "Extensively used in high-frequency applications, fast switching circuits, and as bypass diodes in solar panels. They're crucial in RF circuits, power supplies, and voltage clamping applications.",
+                specification: "• Forward voltage drop: 0.15-0.45V\n• Reverse voltage: 20-200V\n• Switching speed: <100ps\n• Operating temperature: -65°C to 175°C",
+                standards: "Complies with JESD282A standard for Schottky barrier diodes. Major producers like Infineon Technologies, STMicroelectronics, and Toshiba ensure high-quality manufacturing processes.",
+                futureScope: "Research is directed towards developing Schottky diodes with higher current ratings and even lower forward voltage drops. These improvements aim to enhance power conversion efficiency in data centers and electric vehicles, contributing to energy conservation efforts.",
+                datasheetUrl: "https://drive.google.com/file/d/1jdQ6StXEz-NzxaBB620VjCMlWD02-U6K/view",
+                image: "/anagha/schottky.jpg"
+            },
+            led: {
+                description: "Light Emitting Diodes (LEDs) are semiconductor devices that emit light when an electric current passes through them. They're known for their energy efficiency, long lifespan, and versatility in color options.",
+                usage: "Widely used in indicators, displays, lighting fixtures, and optical communication. LEDs have revolutionized the lighting industry and are crucial in creating energy-efficient illumination solutions.",
+                specification: "• Forward voltage: 1.8-3.3V (color dependent)\n• Typical current: 20-50mA\n• Luminous intensity: 1-100mcd\n• Lifespan: Up to 100,000 hours",
+                standards: "Complies with IES LM-80 and LM-84 standards for LED component testing. Key manufacturers like Cree, Osram, and Lumileds adhere to strict quality and performance standards.",
+                futureScope: "Future developments are focused on micro-LED technology for high-resolution displays and more efficient phosphor materials for white LEDs. These advancements aim to improve energy efficiency and color rendering in general lighting applications.",
+                datasheetUrl: "https://drive.google.com/file/d/13qNmA2FwaxuizVmbRC-_xsDBZdxB0z4C/view",
+                image: "/anagha/led.jpg"
+            },
+            varactor: {
+                description: "Varactor diodes, also known as varicap diodes, are specialized diodes that function as voltage-controlled capacitors. Their unique property of varying capacitance with applied reverse voltage makes them invaluable in tuned circuits and frequency modulation applications.",
+                usage: "Primarily used in frequency modulation circuits, voltage-controlled oscillators (VCOs), and automatic frequency control systems. They're crucial in radio and television tuners, as well as in mobile communication devices.",
+                specification: "• Voltage Rating: 5V to 100V\n• Capacitance Range: 1-500pF\n• Q Factor: 50-500 at 50MHz\n• Tuning Ratio: Typically 4:1 to 10:1",
+                standards: "Complies with MIL-PRF-19500 for semiconductor devices and IEC 60747-5 for discrete semiconductor devices. Leading manufacturers ensure adherence to these standards for consistent performance.",
+                futureScope: "Research is focused on integrating varactor diodes into 5G communication systems for improved signal tuning and performance. Developments aim to enhance frequency agility and reduce noise in RF and microwave applications.",
+                datasheetUrl: "https://drive.google.com/file/d/1R4pZVS0nhm-jXN4DwyGtfABmTn5gLqg_/view",
+                image: "/anagha/varactor.jpg"
+            },
+            avalanche: {
+                description: "Avalanche diodes are designed to operate in the breakdown region, utilizing the avalanche effect for precise voltage regulation and protection. They're capable of handling high reverse voltages and are crucial in overvoltage protection circuits.",
+                usage: "Primarily used for overvoltage protection in power circuits and voltage regulation in high-voltage systems. They're essential in surge protection devices and precision voltage reference applications.",
+                specification: "• Voltage Rating: 30V to 1500V\n• Current Rating: 1A to 30A\n• Response Time: <1ns\n• Temperature Coefficient: Typically <0.1%/°C",
+                standards: "Adheres to IEC 60747-2 for discrete semiconductor devices and MIL-STD-750 for test methods. Major manufacturers ensure compliance with these standards for reliability and performance.",
+                futureScope: "Development is focused on creating high-voltage avalanche diodes for more robust protection in power grids and  large-scale industrial applications. Research aims to improve energy handling capabilities and response times.",
+                datasheetUrl: "https://drive.google.com/file/d/12XsQpZf5yUnMc4qASv-R7qidULzAKzqX/view",
+                image: "/anagha/avalanche.jpg"
+            },
+            tunnel: {
+                description: "Tunnel diodes, also known as Esaki diodes, operate on the principle of quantum tunneling. This unique characteristic allows for extremely fast switching capabilities and negative resistance regions, making them valuable in specific high-frequency applications.",
+                usage: "Used in high-speed oscillators, microwave amplifiers, and certain types of digital circuits. They're particularly valuable in ultra-high-frequency applications and some specialized computer memory designs.",
+                specification: "• Peak Current: 0.1mA to 100mA\n• Valley Current: 10-15% of peak current\n• Negative Resistance: -20 to -200 ohms\n• Switching Time: <100ps",
+                standards: "Complies with IEC 60747-2 for semiconductor devices and MIL-STD-750 for testing reliability. Specialized manufacturers adhere to these standards to ensure consistent performance.",
+                futureScope: "Research is exploring expanded use in high-speed switching applications and potential integration in quantum computing systems. The unique negative resistance properties of tunnel diodes may find new applications in advanced electronic circuits.",
+                datasheetUrl: "https://drive.google.com/file/d/1pIsODQ7PQ4A4AOvle9heDL7GI_-c5q-C/view",
+                image: "/anagha/tunnel.jpg"
+            },
+            scr: {
+                description: "Silicon Controlled Rectifiers (SCRs) are four-layer solid-state current-controlling devices. They function as bistable switches, conducting when their gate receives a current pulse and continuing to conduct until the main current is stopped or reversed.",
+                usage: "Widely used in motor control systems, AC power regulation, and controlled rectification. SCRs are crucial in industrial automation, power transmission systems, and renewable energy converters.",
+                specification: "• Voltage Rating: 50V to 4000V\n• Current Rating: 5A to 2000A\n• Turn-on Time: 1-10µs\n• Holding Current: Typically 1-5% of rated current",
+                standards: "Adheres to IEC 60747-6 for thyristor devices and MIL-PRF-19500 for reliability standards. Major manufacturers ensure compliance with these standards for consistent performance.",
+                futureScope: "Future developments are focused on improving SCR performance for smart grid applications, electric vehicle charging systems, and high-power industrial automation. Research aims to enhance switching speeds and reduce power losses.",
+                datasheetUrl: "https://drive.google.com/file/d/1giuTg3qp89h30-h1Cqi2SRaEnnoRDpDG/view",
+                image: "/anagha/scr.jpg"
+            },
+            gdt: {
+                description: "Gas Discharge Tubes (GDTs) are surge protection devices that use ionized gas to create a conductive path when voltage exceeds a certain threshold. They're capable of handling high surge currents and are self-restoring after a surge event.",
+                usage: "Primarily used for surge protection in telecommunications and power systems, as well as in lightning protection applications. GDTs are crucial in protecting sensitive electronic equipment from voltage spikes and transients.",
+                specification: "• Voltage Rating: 100V to 3000V\n• Surge Current Capacity: Up to 40kA\n• Response Time: <1µs\n• Insulation Resistance: >1GΩ",
+                standards: "Complies with IEC 61643-311 for surge protective devices and UL 1449 for safety and performance standards. Manufacturers adhere to these standards to ensure reliable protection capabilities.",
+                futureScope: "Research is focused on improving energy handling capabilities and response times of GDTs. Developments aim to meet the increasing demands of high-voltage power networks and advanced communication systems, particularly in 5G infrastructure.",
+                datasheetUrl: "https://drive.google.com/file/d/1icwHHiyR3pU46zGKoQbplr5pwdmoBwp3/view",
+                image: "/anagha/gdt.jpg"
+            },
+        };
+
+        const diodeSelector = document.getElementById('diodeSelector');
+        const diodeInfo = document.getElementById('diodeInfo');
+
+        diodeSelector.addEventListener('change', function() {
+            const selectedDiode = this.value;
+            if (selectedDiode) {
+                const data = diodeData[selectedDiode];
+                document.getElementById('description').textContent = data.description;
+                document.getElementById('usage').textContent = data.usage;
+                document.getElementById('specification').textContent = data.specification;
+                document.getElementById('standards').textContent = data.standards;
+                document.getElementById('futureScope').textContent = data.futureScope;
+                document.getElementById('datasheetLink').href = data.datasheetUrl;
+                document.getElementById('componentImage').innerHTML = `<img src="${data.image}" alt="${selectedDiode} Diode">`;
+                diodeInfo.style.display = 'grid';
+            } else {
+                diodeInfo.style.display = 'none';
+            }
+        });
+
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            const starCount = 100;
+            const fragment = document.createDocumentFragment();
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = star.style.height = `${Math.random() * 3}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                fragment.appendChild(star);
+            }
+
+            starsContainer.appendChild(fragment);
+        }
+
+        createStars();
+    </script>
+</body>
+</html>

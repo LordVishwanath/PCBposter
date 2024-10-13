@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Discover PCB Components: Powering the Future</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; 
+        }
+
+        body, html {
+            height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        #video-background {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1;
+            object-fit: cover;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            color: #4dd0e1;
+            text-shadow: 0 0 10px rgba(77, 208, 225, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #80deea;
+        }
+
+        .inspiration-box {
+            width: 100%;
+            height: 0;
+            padding-top: 0%;
+            padding-bottom: 56.25%;
+            background-image: url("/Explore\ \(1\)_page-0001.jpg");
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 15px; /* Added 15px border-radius */
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .component-card {
+            background-color: rgba(28, 35, 49, 0.8);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .component-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(77, 208, 225, 0.2);
+        }
+
+        .component-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .component-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #4dd0e1;
+        }
+
+        .component-description {
+            font-size: 0.9rem;
+            color: #b0bec5;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem 0;
+            background-color: rgba(10, 10, 10, 0.8);
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .subtitle {
+                font-size: 1rem;
+            }
+            .inspiration-box {
+                padding-bottom: 75%;
+            }
+            .components-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+            .component-card {
+                padding: 1rem;
+            }
+            .component-title {
+                font-size: 1rem;
+            }
+            .component-description {
+                font-size: 0.8rem;
+            }
+            .quote {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop id="video-background">
+        <source src="/video1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="overlay"></div>
+    <div class="container">
+        <header>
+            <h1><i>Discover PCB Components</i></h1>
+            <p class="subtitle">A Deccetorous initiative</p>
+        </header>
+
+        <div class="inspiration-box">
+        </div>
+
+        <h2 style="text-align: center; margin-top: 1rem; margin-bottom: 1.5rem; color: #4dd0e1;">Active Components</h2>
+
+        <div class="components-grid">
+            <a href="diode.html" class="component-card">
+                <div class="component-icon">⚡</div>
+                <h3 class="component-title">Diode</h3>
+                <p class="component-description">A semiconductor device that allows current to flow in one direction while blocking it in the opposite direction.</p>
+            </a>
+            <a href="mosfet.html" class="component-card">
+                <div class="component-icon">⚡</div>
+                <h3 class="component-title">Transistor</h3>
+                <p class="component-description">Controls and amplifies electrical current in electronic circuits.</p>
+            </a>
+            <a href="OCR.html" class="component-card">
+                <div class="component-icon">⚡</div>
+                <h3 class="component-title">OCR</h3>
+                <p class="component-description">Maintains frequency stability by using a temperature-controlled oven to keep the crystal at a constant temperature.</p>
+            </a>
+            <a href="potentiometer.html" class="component-card">
+                <div class="component-icon">⚡</div>
+                <h3 class="component-title">Potentiometer</h3>
+                <p class="component-description">A variable resistor that adjusts voltage or current in a circuit by changing its resistance.</p>
+            </a>
+            <a href="resistor.html" class="component-card">
+                <div class="component-icon">⚡</div>
+                <h3 class="component-title">Resistor</h3>
+                <p class="component-description">Limits or regulates the flow of current in a circuit by providing resistance.</p>
+            </a>
+            <a href="icc.html" class="component-card">
+                <div class="component-icon">⚡</div>
+                <h3 class="component-title">IC</h3>
+                <p class="component-description">Integrated circuits that combine multiple electronic components into a single package.</p>
+            </a>
+            <a href="capacitor.html" class="component-card">
+                <div class="component-icon">⚡</div>
+                <h3 class="component-title">Capacitor</h3>
+                <p class="component-description">Stores electrical energy temporarily and releases it when needed in a circuit.</p>
+            </a>
+            <a href="transformertan.html" class="component-card">
+                <div class="component-icon">⚡</div>
+                <h3 class="component-title">Transformer</h3>
+                <p class="component-description">Transfers electrical energy between circuits through inductively coupled conductors.</p>
+            </a>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 All rights reserved | Vishwanath S, Satyadutt MS, Tanmay K,  Anagha, Harshitha B M </p>
+    </footer>
+</body>
+</html>

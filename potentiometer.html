@@ -1,0 +1,440 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCB Potentiometer Information Hub</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --primary-color: #3b82f6;
+            --secondary-color: #1e293b;
+            --accent-color: #f472b6;
+            --box-bg-color: rgba(30, 41, 59, 0.8);
+            --box-border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 2rem;
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        #potSelector {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            background-color: var(--box-bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--box-border-color);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233b82f6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em;
+        }
+
+        .bento-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            background-color: var(--box-bg-color);
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .bento-box {
+            background-color: var(--secondary-color);
+            border: 1px solid var(--box-border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .bento-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .bento-box h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .bento-box p {
+            margin: 0;
+            line-height: 1.4;
+            font-size: 0.9rem;
+        }
+
+        .bento-box.large {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .datasheet-link {
+            display: inline-block;
+            margin-top: 0.75rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .datasheet-link:hover {
+            color: var(--accent-color);
+        }
+
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .bento-container {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 1.5rem;
+                padding: 2rem;
+            }
+
+            .bento-box {
+                padding: 1.5rem;
+            }
+
+            .bento-box h3 {
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+            }
+
+            .bento-box p {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+            .bento-box.large {
+                grid-template-columns: 2fr 1fr;
+                gap: 1.5rem;
+            }
+
+            .datasheet-link {
+                margin-top: 1rem;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .container {
+                padding: 0.5rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 1rem;
+            }
+
+            #potSelector {
+                font-size: 0.9rem;
+                padding: 0.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .bento-container {
+                padding: 0.5rem;
+            }
+
+            .bento-box {
+                padding: 0.75rem;
+            }
+
+            .bento-box h3 {
+                font-size: 1rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .bento-box p {
+                font-size: 0.85rem;
+                line-height: 1.3;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="space-background" id="starsContainer"></div>
+    <div class="container">
+        <h1>Potentiometer</h1>
+        <select id="potSelector">
+            <option value="">Select a Potentiometer Type</option>
+            <option value="single">Single Turn Potentiometer</option>
+            <option value="multi">Multi-Turn Potentiometer</option>
+            <option value="dual">Dual-gang Potentiometer</option>
+            <option value="slide">Slide Potentiometer</option>
+            <option value="digital">Digital Potentiometer</option>
+            <option value="carbon">Carbon Composition Potentiometer</option>
+            <option value="wirewound">Wirewound Potentiometer</option>
+            <option value="cermet">Cermet Potentiometer</option>
+            <option value="conductive">Conductive Plastic Potentiometer</option>
+            <option value="linear">Linear Taper Potentiometer</option>
+            <option value="logarithmic">Logarithmic Taper Potentiometer</option>
+        </select>
+        <div id="potInfo" class="bento-container" style="display: none;">
+            <div class="bento-box large">
+                <div>
+                    <h3>Overview & Technical Specifications</h3>
+                    <p id="description"></p>
+                    <p id="specification"></p>
+                </div>
+                <div class="image-container" id="componentImage"></div>
+            </div>
+            <div class="bento-box">
+                <h3>Applications</h3>
+                <p id="usage"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Advantages</h3>
+                <p id="advantages"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Standards & Certifications</h3>
+                <p id="standards"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Future Developments</h3>
+                <p id="futureScope"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Resources</h3>
+                <p>For detailed specifications, please refer to the datasheet:</p>
+                <a href="#" id="datasheetLink" class="datasheet-link" target="_blank" rel="noopener noreferrer">View Datasheet</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        const potData = {
+            single: {
+                description: "Single Turn Potentiometers are variable resistors that can be rotated approximately 270 degrees or ¾ of a full turn. They provide a simple and intuitive way to adjust resistance in a circuit.",
+                usage: "Widely used in volume controls for audio equipment, light dimmers, and sensor calibration. They're essential in many consumer electronics and industrial control applications.",
+                specification: "• Rotation angle: Approximately 270°\n• Resistance range: 100Ω to 1MΩ\n• Power rating: 0.1W to 2W\n• Tolerance: ±5% to ±20%\n• Temperature coefficient: ±250 ppm/°C",
+                advantages: "Simple and intuitive to use, cost-effective, suitable for most general-purpose applications, available in various sizes and configurations.",
+                standards: "Meets MIL-PRF-94 for military applications. Complies with NASA EEE-INST-002 for space flight applications. Adheres to IEC 60393-1 for fixed and variable resistors.",
+                futureScope: "Research is focused on improving durability and environmental resistance. Integration with digital interfaces for smart home applications is an emerging trend.",
+                datasheetUrl: "https://drive.google.com/file/d/131hR_SCWMcKtxQxWh6kuvLwTMWg1zsv5/view",
+                image: "/Potentiometers/single.jpeg"
+            },
+            multi: {
+                description: "Multi-Turn Potentiometers use a wiper driven on a helical path, allowing for multiple rotations. This design provides higher precision and finer adjustment compared to single-turn potentiometers.",
+                usage: "Commonly used in precision applications such as calibration equipment, test and measurement devices, and industrial control systems where fine-tuning is crucial.",
+                specification: "• Number of turns: 3, 5, 10, or 20 turns common\n• Resistance range: 10Ω to 2MΩ\n• Power rating: 0.5W to 2W\n• Tolerance: ±5% to ±10%\n• Temperature coefficient: ±100 ppm/°C",
+                advantages: "High precision and resolution, fine-tuning capability, improved stability over single-turn potentiometers, reduced sensitivity to vibration and shock.",
+                standards: "Complies with MIL-PRF-39023 for wirewound precision potentiometers. Meets RTCA DO-160 environmental conditions for airborne equipment. Adheres to IEC 61131-2 for programmable controllers in industrial environments.",
+                futureScope: "Development is focused on miniaturization and integration with digital readout systems for improved precision in industrial automation.",
+                datasheetUrl: "https://drive.google.com/file/d/1d8GK28oXnlJwvq6P7aDNrQqdqB49TI88/view",
+                image: "/Potentiometers/multi.jpg"
+            },
+            dual: {
+                description: "Dual-gang Potentiometers consist of two potentiometers mounted on the same shaft, allowing simultaneous adjustment of two circuits. They're crucial in stereo audio applications.",
+                usage: "Primarily used in stereo audio equipment for volume control, tone control in musical instruments, and balance control in audio mixers.",
+                specification: "• Number of gangs: 2 (can be more in some cases)\n• Resistance range: 1kΩ to 1MΩ per gang\n• Tracking error: ±1dB to ±3dB\n• Power rating: 0.125W to 0.25W per gang\n• Rotation angle: Typically 300°",
+                advantages: "Simultaneous control of two circuits, space-saving compared to using two separate potentiometers, ideal for stereo applications, can be designed with different tapers for each gang.",
+                standards: "Conforms to EIA-RS-236 for variable resistive components. Meets IEC 60393-1 for potentiometers and preset controls. Complies with RoHS and REACH regulations for environmental safety.",
+                futureScope: "Research is directed towards improving tracking accuracy and developing quad-gang potentiometers for surround sound applications.",
+                datasheetUrl: "https://drive.google.com/file/d/1xrfDjQHv5FXZNTeixdNDoiGNYcntSzy4/view",
+                image: "/Potentiometers/dual.jpg"
+            },
+            slide: {
+                description: "Slide Potentiometers, also known as faders, use linear motion instead of rotation to adjust resistance. They provide a visual indication of the setting and are popular in audio and lighting control applications.",
+                usage: "Widely used in audio mixing consoles, lighting control systems, and graphic equalizers. They're also found in some consumer electronics for volume control.",
+                specification: "• Travel length: 30mm to 100mm common\n• Resistance range: 1kΩ to 100kΩ\n• Power rating: 0.1W to 0.5W\n• Lifetime: Up to 15,000 to 30,000 cycles\n• Taper: Linear or audio (logarithmic)",
+                advantages: "Visual indication of setting, intuitive linear control, easy to adjust multiple units simultaneously, available in various lengths for different resolutions.",
+                standards: "Adheres to IEC 60529 for ingress protection (IP) ratings. Complies with ANSI/EIA 636-A for linear-motion potentiometers. Meets UL94 standards for flammability testing of plastic materials.",
+                futureScope: "Development is focused on integrating touch-sensitive technology and LED indicators for enhanced user interaction in professional audio and lighting equipment.",
+                datasheetUrl: "https://drive.google.com/file/d/1zDUBfSEfq0MUWW7AVuFxpO7oUvvMg47z/view",
+                image: "/Potentiometers/slide.jpg"
+            },
+            digital: {
+                description: "Digital Potentiometers use digital circuits to emulate the behavior of mechanical potentiometers. They offer precise resistance control through digital interfaces, making them ideal for microcontroller-based systems.",
+                usage: "Used in automated systems, microcontroller-based projects, and applications requiring frequent or remote adjustments. Common in modern audio equipment and industrial control systems.",
+                specification: "• Resolution: 8-bit to 10-bit common (256 to 1024 steps)\n• Resistance range: 1kΩ to 1MΩ\n• Interface: SPI, I2C, or Up/Down control\n• Power supply: Usually 3.3V or 5V\n• Wiper resistance: 50Ω to 1kΩ",
+                advantages: "Precise digital control, no mechanical wear, programmable and easily integrated with microcontrollers, some types offer non-volatile memory for settings retention.",
+                standards: "Complies with IEC 61000-4-2 for ESD protection. Meets JEDEC JESD22-A114 for electrostatic discharge sensitivity testing. Adheres to AEC-Q100 for automotive-grade qualification.",
+                futureScope: "Research is focused on increasing resolution and reducing power consumption. Integration with  IoT devices for remote control and monitoring is an emerging trend.",
+                datasheetUrl: "https://drive.google.com/file/d/1BlmK0JP3oqpdw7tfHNnb_vSWNWXtXOAe/view",
+                image: "/Potentiometers/digital.jpg"
+            },
+            carbon: {
+                description: "Carbon Composition Potentiometers use a carbon-based resistive element. They are known for their simplicity and low cost, making them popular in consumer electronics and hobbyist projects.",
+                usage: "Commonly used in audio equipment for volume control, in simple voltage divider circuits, and in applications where precision is not critical.",
+                specification: "• Resistance range: 100Ω to 5MΩ\n• Power rating: 0.1W to 2W\n• Tolerance: ±10% to ±20%\n• Temperature coefficient: ±500 ppm/°C\n• Rotational life: Typically 10,000 cycles",
+                advantages: "Low cost, good for high-frequency applications, can handle high-energy pulses, simple construction.",
+                standards: "Meets MIL-PRF-94 for variable resistors. Complies with IEC 60393-1 for potentiometers and preset controls. Adheres to RoHS and REACH regulations for environmental safety.",
+                futureScope: "While being phased out in many applications, research continues on improving stability and reducing noise for niche applications in audio equipment.",
+                datasheetUrl: "https://www.mouser.com/datasheet/2/54/cv-1159.pdf",
+                image: "/Potentiometers/carbon.jpg"
+            },
+            wirewound: {
+                description: "Wirewound Potentiometers use a coil of resistive wire wrapped around an insulating core. They offer high precision and power handling capabilities, making them suitable for industrial applications.",
+                usage: "Used in power supplies, motor speed controls, and other high-power applications. Also found in precision measurement equipment and laboratory instruments.",
+                specification: "• Resistance range: 1Ω to 100kΩ\n• Power rating: 1W to 20W\n• Tolerance: ±1% to ±5%\n• Temperature coefficient: ±50 ppm/°C\n• Rotational life: Up to 1,000,000 cycles",
+                advantages: "High precision, excellent stability, high power handling capability, low temperature coefficient.",
+                standards: "Complies with MIL-PRF-39023 for wirewound precision potentiometers. Meets IEC 60393-1 for potentiometers. Adheres to IEEE 202 for standard terminology related to electrical and electronic testing.",
+                futureScope: "Development is focused on reducing size while maintaining power handling capabilities. Integration with digital interfaces for smart industrial control systems is an emerging trend.",
+                datasheetUrl: "https://drive.google.com/file/d/1MduZcfalO9lgHNSH2rOWZ8iM1Ag_EO4F/view",
+                image: "/Potentiometers/wire.jpg"
+            },
+            cermet: {
+                description: "Cermet Potentiometers use a ceramic and metal alloy resistive element. They offer a good balance between the precision of wirewound potentiometers and the cost-effectiveness of carbon types.",
+                usage: "Widely used in industrial controls, telecommunications equipment, and high-reliability electronics where stability and precision are important.",
+                specification: "• Resistance range: 10Ω to 5MΩ\n• Power rating: 0.5W to 3W\n• Tolerance: ±5% to ±10%\n• Temperature coefficient: ±100 ppm/°C\n• Rotational life: Up to 1,000,000 cycles",
+                advantages: "Good stability, low noise, wide resistance range, better tolerance than carbon types.",
+                standards: "Meets MIL-PRF-22097 for cermet and wirewound trimming potentiometers. Complies with IEC 60393-1 for potentiometers. Adheres to EIA-RS-436 for variable resistive components.",
+                futureScope: "Research is focused on improving humidity resistance and developing hybrid digital-analog interfaces for smart industrial applications.",
+                datasheetUrl: "https://drive.google.com/file/d/1t9-m-SN1c7uRef_x2a8CUIAwEw30yNUC/view",
+                image: "/Potentiometers/Cermet.jpg"
+            },
+            conductive: {
+                description: "Conductive Plastic Potentiometers use a resistive element made from a plastic material filled with conductive particles. They offer smooth operation and good linearity.",
+                usage: "Commonly used in audio equipment, medical devices, and industrial control systems where smooth operation and long life are important.",
+                specification: "• Resistance range: 100Ω to 1MΩ\n• Power rating: 0.5W to 2W\n• Tolerance: ±5% to ±10%\n• Temperature coefficient: ±300 ppm/°C\n• Rotational life: Up to 5,000,000 cycles",
+                advantages: "Very smooth operation, low noise, excellent linearity, long operational life.",
+                standards: "Complies with IEC 60393-1 for potentiometers. Meets ANSI/EIA RS-236-C for variable resistive components. Adheres to MIL-PRF-39023 for high-reliability applications.",
+                futureScope: "Development is focused on improving temperature stability and integrating with haptic feedback systems for enhanced user interaction in professional equipment.",
+                datasheetUrl: "https://www.bourns.com/docs/product-datasheets/6639.pdf",
+                image: "/Potentiometers/conductive.jpg"
+            },
+            linear: {
+                description: "Linear Taper Potentiometers have a resistive element that changes linearly with shaft rotation. This means the resistance change is directly proportional to the shaft's rotational position.",
+                usage: "Used in applications requiring proportional control, such as in servo motor control, sensor calibration, and some audio applications like balance control.",
+                specification: "• Resistance change: Proportional to rotation\n• Common values: 1kΩ to 100kΩ\n• Linearity: Typically ±5% to ±10%\n• Power rating: 0.25W to 2W\n• Rotational angle: Usually 300°",
+                advantages: "Predictable and even resistance change, suitable for applications requiring proportional control, easy to understand and implement.",
+                standards: "Adheres to IEC 60393-1 for potentiometers. Complies with MIL-PRF-94 for variable resistors. Meets ANSI/EIA RS-236-C for variable resistive components.",
+                futureScope: "Research is focused on improving linearity and developing dual-gang linear potentiometers with ultra-low tracking error for precision stereo applications.",
+                datasheetUrl: "https://drive.google.com/file/d/11oWrq39qpmkKz-IjLmh7iPcgGqoE2Bu4/view",
+                image: "/Potentiometers/linear.jpg"
+            },
+            logarithmic: {
+                description: "Logarithmic Taper Potentiometers, also known as Audio Taper, have a resistive element that changes logarithmically with shaft rotation. This matches the human ear's logarithmic perception of sound volume.",
+                usage: "Primarily used in audio equipment for volume control, including home stereos, professional audio gear, and musical instruments. Also found in some lighting control applications.",
+                specification: "• Resistance change: Logarithmic with rotation\n• Common values: 10kΩ to 1MΩ\n• Taper accuracy: Typically ±20% to ±30%\n• Power rating: 0.25W to 2W\n• Rotational angle: Usually 300°",
+                advantages: "Provides natural-feeling volume control, matches human hearing characteristics, allows for fine adjustment at low volumes.",
+                standards: "Complies with IEC 60393-1 for potentiometers. Meets ANSI/EIA RS-236-C for variable resistive components. Adheres to AES16 standard for audio controls.",
+                futureScope: "Development is focused on creating more accurate and consistent logarithmic tapers. Integration with digital audio systems for hybrid analog-digital volume control is an emerging trend.",
+                datasheetUrl: "https://drive.google.com/file/d/1PfzzAJ2JMO7BvsAnwf-wcBcb3sWtdjY2/view",
+                image: "/Potentiometers/log.jpg"
+            }
+        };
+
+        const potSelector = document.getElementById('potSelector');
+        const potInfo = document.getElementById('potInfo');
+
+        potSelector.addEventListener('change', function() {
+            const selectedPot = this.value;
+            if (selectedPot) {
+                const data = potData[selectedPot];
+                document.getElementById('description').textContent = data.description;
+                document.getElementById('usage').textContent = data.usage;
+                document.getElementById('specification').textContent = data.specification;
+                document.getElementById('advantages').textContent = data.advantages;
+                document.getElementById('standards').textContent = data.standards;
+                document.getElementById('futureScope').textContent = data.futureScope;
+                document.getElementById('datasheetLink').href = data.datasheetUrl;
+                document.getElementById('componentImage').innerHTML = `<img src="${data.image}" alt="${selectedPot} Potentiometer">`;
+                potInfo.style.display = 'grid';
+            } else {
+                potInfo.style.display = 'none';
+            }
+        });
+
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            const starCount = 100;
+            const fragment = document.createDocumentFragment();
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = star.style.height = `${Math.random() * 3}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                fragment.appendChild(star);
+            }
+
+            starsContainer.appendChild(fragment);
+        }
+
+        createStars();
+    </script>
+</body>
+</html>

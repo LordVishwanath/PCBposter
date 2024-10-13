@@ -1,0 +1,454 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCB Oscillator Information Hub</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --primary-color: #3b82f6;
+            --secondary-color: #1e293b;
+            --accent-color: #f472b6;
+            --box-bg-color: rgba(30, 41, 59, 0.8);
+            --box-border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 2rem;
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        #oscillatorSelector {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            background-color: var(--box-bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--box-border-color);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233b82f6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em;
+        }
+
+        .bento-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            background-color: var(--box-bg-color);
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .bento-box {
+            background-color: var(--secondary-color);
+            border: 1px solid var(--box-border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .bento-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .bento-box h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .bento-box p, .bento-box ul {
+            margin: 0;
+            line-height: 1.4;
+            font-size: 0.9rem;
+        }
+
+        .bento-box ul {
+            padding-left: 1.25rem;
+        }
+
+        .bento-box.large {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .datasheet-link {
+            display: inline-block;
+            margin-top: 0.75rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .datasheet-link:hover {
+            color: var(--accent-color);
+        }
+
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .bento-container {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 1.5rem;
+                padding: 2rem;
+            }
+
+            .bento-box {
+                padding: 1.5rem;
+            }
+
+            .bento-box h3 {
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+            }
+
+            .bento-box p, .bento-box ul {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+            .bento-box ul {
+                padding-left: 1.5rem;
+            }
+
+            .bento-box.large {
+                grid-template-columns: 2fr 1fr;
+                gap: 1.5rem;
+            }
+
+            .datasheet-link {
+                margin-top: 1rem;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .container {
+                padding: 0.5rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 1rem;
+            }
+
+            #oscillatorSelector {
+                font-size: 0.9rem;
+                padding: 0.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .bento-container {
+                padding: 0.5rem;
+            }
+
+            .bento-box {
+                padding: 0.75rem;
+            }
+
+            .bento-box h3 {
+                font-size: 1rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .bento-box p, .bento-box ul {
+                font-size: 0.85rem;
+                line-height: 1.3;
+            }
+
+            .bento-box ul {
+                padding-left: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="space-background" id="starsContainer"></div>
+    <div class="container">
+        <h1>Oscillator</h1>
+        <select id="oscillatorSelector">
+            <option value="">Select an Oscillator Type</option>
+            <option value="crystal">Crystal Oscillator</option>
+            <option value="vco">Voltage-Controlled Oscillator (VCO)</option>
+            <option value="pll">Phase-Locked Loop (PLL) Oscillator</option>
+            <option value="mems">MEMS Oscillator</option>
+            <option value="tcxo">Temperature-Compensated Crystal Oscillator (TCXO)</option>
+        </select>
+        <div id="oscillatorInfo" class="bento-container" style="display: none;">
+            <div class="bento-box large">
+                <div>
+                    <h3>Overview & Technical Specifications</h3>
+                    <p id="description"></p>
+                    <ul id="specification"></ul>
+                </div>
+                <div class="image-container" id="componentImage"></div>
+            </div>
+            <div class="bento-box">
+                <h3>Applications</h3>
+                <p id="applications"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Military and Aerospace Standards</h3>
+                <ul id="standards"></ul>
+            </div>
+            <div class="bento-box">
+                <h3>Major Manufacturers</h3>
+                <ul id="manufacturers"></ul>
+            </div>
+            <div class="bento-box">
+                <h3>Future Developments</h3>
+                <p id="futureScope"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Resources</h3>
+                <p>For detailed specifications, please refer to the datasheet:</p>
+                <a href="#" id="datasheetLink" class="datasheet-link" target="_blank" rel="noopener noreferrer">View Datasheet</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        const oscillatorData = {
+            crystal: {
+                description: "Crystal oscillators are precision frequency devices that use the mechanical resonance of a vibrating crystal of piezoelectric material to create an electrical signal with a very precise frequency.",
+                specification: [
+                    "Frequency Range: 1 kHz to 1 GHz",
+                    "Stability: ±10 ppm to ±0.5 ppm",
+                    "Temperature Range: -40°C to +85°C (standard), up to +125°C for high-reliability versions",
+                    "Output Type: Sine wave, square wave",
+                    "Phase Noise: Very low (better than -150 dBc/Hz at 10 kHz offset)"
+                ],
+                applications: "Crystal oscillators are used in microcontrollers, radios and telecommunication equipment, GPS devices, and precision timekeeping devices. They are essential in applications requiring high stability and precision.",
+                standards: [
+                    "MIL-PRF-55310: General performance specification for oscillators",
+                    "MIL-STD-202: Test methods for electronic and electrical component parts",
+                    "DO-160: Environmental conditions for airborne equipment"
+                ],
+                manufacturers: [
+                    "Epson: Known for their crystal devices and resonators.",
+                    "TXC Corporation: Offers high-precision quartz crystal oscillators.",
+                    "SiTime: Specializes in MEMS-based timing solutions."
+                ],
+                futureScope: "Future developments in crystal oscillators include advancements in MEMS (Micro-Electro-Mechanical Systems) technology to replace traditional quartz crystals, and higher integration with microprocessors for reduced size and improved performance in harsh environments.",
+                datasheet: "https://drive.google.com/file/d/1b--GoJNhrApFuQV01CgZfYIhyhTtlYTQ/view",
+                image: "https://5.imimg.com/data5/CL/TL/GLADMIN-35178407/12mhz-crystal-oscillator.png"
+            },
+            vco: {
+                description: "Voltage-Controlled Oscillators (VCOs) are electronic oscillators whose oscillation frequency is controlled by a voltage input. They are crucial in systems where frequency needs to be adjusted dynamically.",
+                specification: [
+                    "Frequency Range: 10 MHz to several GHz",
+                    "Tuning Range: Can vary frequency over a wide range by adjusting input voltage",
+                    "Phase Noise: Typically around -120 dBc/Hz at 100 kHz offset",
+                    "Power Consumption: Low to moderate"
+                ],
+                applications: "VCOs are used in Phase-Locked Loops (PLLs), frequency synthesizers, wireless communication systems, and radar systems. They are essential in applications requiring dynamic frequency adjustment.",
+                standards: [
+                    "MIL-STD-810G: Environmental testing for military applications",
+                    "MIL-PRF-38534: Hybrid microcircuits",
+                    "DO-254: Design assurance for airborne electronics"
+                ],
+                manufacturers: [
+                    "Analog Devices: High-performance VCOs for communications and radar.",
+                    "Texas Instruments: VCOs for embedded and industrial applications.",
+                    "Mini-Circuits: Provides VCOs with a wide range of frequencies for RF applications."
+                ],
+                futureScope: "Future developments in VCOs focus on increased integration with RF systems and microcontrollers, as well as higher frequency operation for 5G and satellite communications.",
+                datasheet: "https://drive.google.com/file/d/1gizhTfcu1a-fKsSBkYErvFvEC_cn2mLa/view",
+                image: "data:image/jpeg;base64,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"
+            },
+            pll: {
+                description: "Phase-Locked Loop (PLL) Oscillators are feedback control systems that generate an output signal whose phase is related to the phase of an input signal. They are used for frequency synchronization and signal locking in communication systems.",
+                specification: [
+                    "Frequency Range: 100 kHz to 10 GHz",
+                    "Locking Time: Typically in the range of microseconds",
+                    "Jitter: Can be less than 1 ps RMS for high-performance designs",
+                    "Power Consumption: Moderate to high depending on design"
+                ],
+                applications: "PLL oscillators are used in wireless communication systems, clock generation for microprocessors, signal synchronization in telecommunications, and GPS and satellite communications.",
+                standards: [
+                    "MIL-PRF-38535: General specification for integrated circuits",
+                    "DO-178C: Software considerations in airborne systems",
+                    "MIL-STD-461: Control of electromagnetic interference"
+                ],
+                manufacturers: [
+                    "Broadcom: Known for high-performance PLLs in networking and telecom.",
+                    "Microchip Technology: PLL solutions for embedded systems and timing.",
+                    "IDT (Renesas): Provides PLL-based clock generators for networking."
+                ],
+                futureScope: "Future developments in PLL oscillators include higher integration with System-on-Chip (SoC) devices and enhanced precision with lower phase noise for high-speed data communications.",
+                datasheet: "https://drive.google.com/file/d/1Ch_G7K7gOG67nElsuiCdzxDcPFu02aBn/view",
+                image: "https://www.df9np.de/Contents/PLL_5700MHz.JPG"
+            },
+            mems: {
+                description: "MEMS (Micro-Electro-Mechanical Systems) Oscillators are timing devices that use MEMS technology instead of traditional quartz crystals. They offer better reliability, smaller size, and lower power consumption.",
+                specification: [
+                    "Frequency Range: 1 MHz to 200 MHz",
+                    "Stability: ±5 ppm to ±50 ppm",
+                    "Temperature Range: -40°C to +125°C",
+                    "Power Consumption: Very low (suitable for portable devices)",
+                    "Phase Noise: Typically around -140 dBc/Hz at 10 kHz offset"
+                ],
+                applications: "MEMS oscillators are used in wearable electronics, smartphones, automotive electronics, and medical devices. They are particularly suitable for applications requiring small size and low power consumption.",
+                standards: [
+                    "MIL-STD-883: Test methods and procedures for electronic devices",
+                    "AIAA-S-121: Reliability and maintainability of space systems",
+                    "RTCA DO-178B: Software safety considerations for aerospace"
+                ],
+                manufacturers: [
+                    "SiTime: The market leader in MEMS timing solutions.",
+                    "Abracon: Offers MEMS oscillators for industrial and automotive markets.",
+                    "Microchip: Provides MEMS-based timing devices for embedded systems."
+                ],
+                futureScope: "Future developments in MEMS oscillators include enhanced performance at higher frequencies to replace traditional crystal oscillators in 5G and IoT applications, and integration into wearable and medical devices for ultra-low power applications.",
+                datasheet: "https://drive.google.com/file/d/1MJKl5EcQnEmNw8T4xQzd6ZiVZBFNoWd8/view",
+                image: "https://www.microchip.com/en-us/products/clock-and-timing/components/military-mems/_jcr_content/root/responsivegrid/container_713868512/container/cardgrid/card1/image.coreimg.jpeg/1696440447597/htm6100-h4a-regular.jpeg"
+            },
+            tcxo: {
+                description: "Temperature-Compensated Crystal Oscillators (TCXOs) are designed to maintain stable frequency over a wide range of temperatures. They use temperature compensation circuits to adjust the oscillator frequency as temperature changes.",
+                specification: [
+                    "Frequency Range: 10 MHz to 100 MHz",
+                    
+                    "Stability: ±0.1 ppm to ±2 ppm",
+                    "Temperature Range: -40°C to +85°C (or extended ranges for specific applications)",
+                    "Power Consumption: Low to moderate"
+                ],
+                applications: "TCXOs are used in GPS receivers, cellular base stations, test and measurement equipment, and military radios. They are essential in environments where temperature fluctuations are significant.",
+                standards: [
+                    "MIL-PRF-55310: Performance specification for oscillators",
+                    "MIL-STD-202: Test methods for electronic component parts",
+                    "MIL-STD-461: Electromagnetic interference control"
+                ],
+                manufacturers: [
+                    "Rakon: Specializes in high-precision TCXOs for aerospace and military applications.",
+                    "Vectron International: Offers TCXOs for high-reliability industries.",
+                    "Abracon: Provides high-performance TCXOs for industrial applications."
+                ],
+                futureScope: "Future developments in TCXOs focus on miniaturization for use in portable electronics and IoT devices, as well as improved compensation algorithms for even better temperature stability.",
+                datasheet: "https://drive.google.com/file/d/1cXsp0SqybXcP5VLeRDzK2T-cRM9CFeXX/view",
+                image: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxMSEA8SEhASFRAWEBAaGREVEBYVFhMTFxEWFhcTGBMYHSghGholHRcVLTIhKSk3Li8uFx8zOD8sNygvLisBCgoKDg0OGhAQGTgmICYtLS44KzcrLS43MCstLzAtLy0tLi0tLSs3LS0tNC0tLTU4LzUtLS0uNS0tNS0rLS0tLf/AABEIAOEA4QMBIgACEQEDEQH/xAAcAAEAAgMBAQEAAAAAAAAAAAAAAQQFBgcDAgj/xABIEAACAgEBBAcFBAUHDAMAAAABAgADEQQFEiExBhMiQVFhcQcygZGhFCNSsTNCQ2KSFnKCk8HC0TVTY3N0g4Sis+Hi8BUXNP/EABkBAQADAQEAAAAAAAAAAAAAAAABAgMEBf/EACoRAQABAwMCBQQDAQAAAAAAAAABAgMREiExBGETFDJBUSIzgZFCocEj/9oADAMBAAIRAxEAPwDuEREBEmRAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBAiBAmIiAkSZEBERAREQEREBERAREQEREBERAREQEREBERAREQEREBAiBAmIiAiIgIiICIiAiIgQYgxAREQEREBERAREQEREBERAREQEREBAiBAmIiAiJECYkRAmJEQJiREAYiTAiJMq6jX1JwZwD4cz8hxgWYlGvbFBOOsHxDAfMiXlIIyDkeMBEmIERJiBESYgREmIERJiBEREBAiBAmIiAkSZEBERARIZgBkkAeJmM/lHo+uNH2zTdeOdXX174PPG7nOfKMjKTy1WpSpGex0StRku7BVUeJY8BNJ6Tba2k99lOiGmp043R9sc9a7koCTXSOyMEkdrgcTADohXa4s1t9+ttByDe56tTjjuUL2VHlxkZHQbukCboarDqwBDhgVIIyCMcxiYrVbTtfm2B4DgJTqpVVCqoVQMBVAAA8AByi11RWZmCqoJLMQAoHMknkJh4U1eurPbiGmvHphWXQVi1rhWotbG84GC2BgE45nHfzljEqPtekDeZyqYz1j1WJXjx61lC488y6hBAIIII4EHII8QZtEREYhSZy+cT30ures9hiPLmD8J54jElDPaTb4PCxcH8S8R8uY+szFNyuMqwI8QczScT7psZTlWIPiDGRu0TAaTbpHCxc/vLwPxHIzMabVpYOwwPl3j4SR7xEQEREBERAiIiAgRAgTETzuvVfeYD8/lImYiMymIzw9JEwnSXb7aehbKNO2qsZwq1Vuq8SrHedzwVRjifEiaZqBtbWZ6/WJoqTn7jRjNpB/FqW4qw48V4RExKG8be6S6TRLvarU1VcCQrNl2H7tYyzfASoOkYtQPSOw3JmUg48cED+2avsrolpNOxdKQ9xOTfaTbaT4775wfTEzeJS5TNW0ThamYj2Rdc7nLMT8Z4ioZ3sDexjexxx4Z8JGt1SUobLXCICMseWSQB9SJW12qdtObNJ1dzHdK4cFWXI3ipyAzYzgFgCe8StFqijeI/JVXM8rm7Kev2glTVIQxstZgiKBlyq7xGWIUcPEzHnahxldVUrjOaNXX1DHHcDwKjP626w9ecs13fbNKx+zqSWYdVf+jZkbG+HCnKHGVcDjwPCaqqu29p2LUQobT2by4suVerK5G8vXJvpWSMgM/DPcZ43kujKW1FbFCDVdpvtNNgIxgmsEMD4K4PHlMsuyBubnWXCsqQa+uLjBHFRY4L49CPhIo1lNSdXUrGuo9WRVW1nVFFXCFVBbkV7jAobD0l3VKQz0+8Oot++RQGIDIW3bFVhghWbgMDAl3ZOyRp+tKk/ePvlQoWtWxg9XWPdzzPMkkmUb9vkWsn3DUtgBxc1b1kj3bRgmtvAnA8wcA19NpmW4Jdp72DnC6pQVuQDkl9tDdpfB8+TDvIXm29W9Zalkaze3RXazacswPaQdYvvgZ4Y588c5d2dr0uUlMhlOHrYbr1t+F17vI8iOIyOMrNsJuuW1NTYDwDqyI4trx+jfAG95M2WHccEg3dPsmmuw2V01pYV3d5VC9nOcYHDnA992N2em7PWrSs3IH15CVqqppjNU4ThVxJUHIxnPdjnMiNGqjLvyHEDu9TMFtPpto9PkI3WP4VAP87M7v1zOOetpmcWqZqn+l4t/OzP1bYepSbVZkAJyMb4AGeR5zMbM19eopqvqbeqsRWVsEZUjIOCAR8Zw7pF05v1KtWqrVUwIIBLOy94L8MA+Q+M3j2ddNtCdNptG14q1FaKm5b2A5HAbjnstnuGc+U6LHizEzc/SK9P8XQoiJuoREQIiJrntA2/ZodC99So1u/WqhwSuWbBJAIzgZPPugbGTNR6Qe0jZ+k3gb+ttGfuqB1hyOYLA7inyLAzhW3+lOs1hI1GpsZDn7kHcqx4GtcBvVsmUtidWNRT1uOqDjOeXLhnyziB37WdM6zS9oswqhc1gdvtMFAHjxI5H5SwlbMN4g+nPHrNN6X/AGd9mM1D1uQ1O9usGwC45gTG9HvaJbUFS9OtQADfBxZjzzwf6HxJnm3enuRMVx9Xaf8APZ0RdjGOHRN2Tuzz2Rt7S6sfd2DfxxT3XHqh4n1GRL76U8xxE1t9ZbmdNf0z8SymiY3U92N2epWN2dijxNYOMgcDkcOR8RMZrdiKziypzRYWBeyoANYPBgew3qyt5Y5y7tPaVOnTfvtWtScDJ4sfBVHFj6CYH+X+gzjrXx49RZj8s/SBlvtldZ6oNZZaMEqA1jje4guRwTPHGcDwlbauqvBr6pVAI7aFkOoH+rRmCE+pPoZ66OvSarevqKOWwGdGZScDgtgUgkgdzd08LOjCOjVP1IpLZKUaZai3HPaclmz+8u6YFXZNi3uVLXK6rxSzVWV6jmRvPpk3UVeBwRkGXF2K1dtltFxD2FOsW1esR90boPDdZW3eG9nuGQcTN7g4cOIGM9+PDMkLAqavQ12ru21V2L4OgYfIz1rqCgKoAUAAKBgAAYAAHIS7Xo2PPgPP/CNTZRQu9bYoHizAA+nifKctzrLVE4zmfiN1oomVZKieQJllNAf1iAPmZrW1PaFUmVorLn8R7CfUbx9MCabtXpXqr8hrSin9SvKD0LZ3j6EzLV1N30xpjvynFMcul7S23o9LnrLF3x+r7z/wDJHqQBNP2v7SXORp6sD8dnP+rU/3j6TRGlWzUrnAyzfhUbx+kvT0NGdVyZqnua59mR2rti/UfprncfhzhB6IML8cTGsZUfU2McKhHqOP14CfVVbgcbCM+HP03uYnZTTFMYiFM5etrAe8Qvrz/h5/SfOruSytVFAJC461uyfkOY9TPlaVHIcfHmfnJcyR1z2F2v8AZtUjWO6pbWEVmJFalPdQE9kcOQ4Tps5x7FNJYmn1TPW6K9tZUshUOAnvLkcRx5idHgIiIETRPbP/AJM/4mn+9N7Mp7V2XTqamqvqWys47LeI5EEcQfMcYH5bKg8xLWztlLaWy5GFzyBnTukPsh5vorv9xcfotoGfgwPrPb2d9FzUt66zR4tFjAdZWH7G6mN1hkEZLcQfGY370WqNUxlamnVOHKEvRA1ZrXOf0oXtcD355/Az1TjxUgjy7vUcxLfSShU1mrRVARdRcAuOAAc4AmLOn71OD/738xNaZzESrK6jYIIOCCCCOYPiDNt2H061VGA565PBzh8eVnM/0gZoRexTkk8T38QZZo1w/W4efMSly1RcjFcZTEzHDuex+mGl1WFLblh/Uswpz5NnDegOfKZttL+E58jznAK2BHiJsGxek+p0+Alm8g/ZvllA8B3r8DicflblrezVt8TwtqieYb10r6KVa0J1hdLE3t117g2MgqeBHAefDnNR/wDqts//ALVx/s5z/wBSbfsrp5p7QFuBqbzG8p9GA/MCZddr6NuI1NP9cn5EyY6yqna7RMT+4NHxLD9GOjFWhRxWzM77u+7Ecd3O6Ao4ADebz4zP16djyHxlS3pFo6xvC1H8N09Zn03ciYDaXTlzkU1hR+J+J/hHAfMx5i7c+1R+Z2NMRzLcPsyqCXbgOfcB6mYfX9LtLTkIesbwrGR8X5fImc+1+0rbj97YzeRPZHoo4D5THXWhRkkAeJOB848pXc+9XntG0GqI4hs21Om2osyE3al8u038RGPkBNX1N7OxZ2ZmP6zMWJ+JmL1W26x7uXPlwHzMql9RbyG4v8P15n4Trt2aLcYojCszM8shqNSqe8wHl3/KY23amTitCT4n/AT1p2QoPaJZieXLJ/MzPfyb1CUPeaDXSoBJYbhOWCjCHtHmOOJaqumnmUYawdPa/vtgeH/Yf2zaug3Rqy83dSyAIq7xdiOLZxgKp/CZh1UswVQWY8lUEknwAHEzqvss2DfSmpa+t6g5p3Q26GYAPnKnJXmOYErd16J8PlMYzu5dtfZtmmtaqwqWHHKkkYJOOJAnxs3ZV+pbd09Nlpzx3V4Kf3nPZX4mdzu6EaSy833I1r4AC2N2BjP6igBuffmbBRSqKFRVVAMBVUKAPAAcpNvVpjXyVYztw5JsX2TXPhtVetS/5uvtv6Fz2VPoGm/7D6F6LSYNenU2D9rZ94+fEFvd/ogTYIl0EREBERAgxBiAgiIgc/6V+zCrUPZdRa1VzszMr5et2JyT+JCT4EjynMNu9GNXoyevpYJn9MvbqP8ATHL0bBn6PkMAQQRkHuPeIH5dUz4fRq3Lgfp8p3Pb/s20moy1QOntPfWPuyfOnl/Dic4270G1mkyxr62oftassAP3k95flgeMDS+qdGUA8WzjBGGx5H4c5kK9UysEtXdbx3hj88fWZbo30fXW3pmxlCfhUHO95n+Z9Z99K9iJVqrKixbdCYfG6cMgbGMkd8yi9RNc287wtNMxEVK6NPXe7dPo35mYpNM9fuElfw/+Pd8JkaNShxv1X768ghBGT5EZHxzNVWS3uHwlbUa1FGSwx45AHzPCVrK7LP8ARr5tvt8sBfoDIr2XWDvMC7ficlvoeEDHttS+3IprwPxc/wDmPZE9tnbFse2su+/YXUKnPLE4Ay3AcZlCZleiehsu1enKI5RbqyzhCVQKwbtHkOXjIqzicDCbY6PanT6tbLKwte6wyLEOCRwyAZ5u07XtzokmqwHtcDIzuhc4GeAJziWtkdFtJpsGqhd8ftH7b58QzcvhiZ2ZuTT/ANI37LV6c/S1L2Y7LYV3WPQVYuu5Y9e6Sm7x3WYZ3c+E3PX7GS+p6rsmtt3KqSM4YNje58x3TJxM/KW5ueJO8mucYUdl7G0+mXdopSvxKr2m/nPzb4mXoidKpERAREQEREBERAgxBiAiIgIiICTIkwKH/wANp+sa3qKxY2N5wgBbGcE45nieM530+6Hal9TZqaKxZUwTsIc2LuoFPYPvDh3ZPHlOpxI0xnON05nh+bjkEqQQwOCpGCD4EHkZ8aNvvbf5w/OfoDbPR7TaoYvpVmxwcdl19HHHHlymIX2dbPByKHDZBJ+0XdryILY+UlDlNSM7BUVmY8lVSzH0UcTNm2V0D1d2DYFpTxfi+PEVr+RInUdn7NpoXdpqSsd+6oBPmTzJ8zLUDVdk9AtJVgupufxs934Vjhj1zNorrCgKoAUDgAMADyAn1EBERAREQEREBERAREQEREBERAgxBiAiIgIiICTIkwEREBERAREQEREBERAREQEREBERAREQEREBERAgxBiAiIgIiICTIkwEREBERAREQEREBERAREQEREBERAREQEREBERAgxBiAiIgIiICTIkwEREBERAREQEREBERAREQEREBERAREQEREBERAgxBiAiIgIiICTIkwEREBERAREQEREBERAREQEREBERAREQEREBERAgxEQEREBERASYiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiIH//2Q=="
+            }
+        };
+
+        const oscillatorSelector = document.getElementById('oscillatorSelector');
+        const oscillatorInfo = document.getElementById('oscillatorInfo');
+
+        oscillatorSelector.addEventListener('change', function() {
+            const selectedOscillator = oscillatorSelector.value;
+            if (selectedOscillator) {
+                const data = oscillatorData[selectedOscillator];
+                document.getElementById('description').textContent = data.description;
+                document.getElementById('specification').innerHTML = data.specification.map(spec => `<li>${spec}</li>`).join('');
+                document.getElementById('applications').textContent = data.applications;
+                document.getElementById('standards').innerHTML = data.standards.map(standard => `<li>${standard}</li>`).join('');
+                document.getElementById('manufacturers').innerHTML = data.manufacturers.map(manufacturer => `<li>${manufacturer}</li>`).join('');
+                document.getElementById('futureScope').textContent = data.futureScope;
+                document.getElementById('componentImage').innerHTML = `<img src="${data.image}" alt="${selectedOscillator} Oscillator">`;
+                document.getElementById('datasheetLink').href = data.datasheet;
+                oscillatorInfo.style.display = 'grid';
+            } else {
+                oscillatorInfo.style.display = 'none';
+            }
+        });
+
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            const starCount = 100;
+            const fragment = document.createDocumentFragment();
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = star.style.height = `${Math.random() * 3}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                fragment.appendChild(star);
+            }
+
+            starsContainer.appendChild(fragment);
+        }
+
+        createStars();
+    </script>
+</body>
+</html>

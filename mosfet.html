@@ -1,0 +1,398 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCB Transistor Information</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --primary-color: #3b82f6;
+            --secondary-color: #1e293b;
+            --accent-color: #f472b6;
+            --box-bg-color: rgba(30, 41, 59, 0.8);
+            --box-border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 2rem;
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        #transistorSelector {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            background-color: var(--box-bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--box-border-color);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233b82f6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em;
+        }
+
+        .bento-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            background-color: var(--box-bg-color);
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .bento-box {
+            background-color: var(--secondary-color);
+            border: 1px solid var(--box-border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .bento-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .bento-box h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .bento-box p, .bento-box ul {
+            margin: 0;
+            line-height: 1.4;
+            font-size: 0.9rem;
+        }
+
+        .bento-box ul {
+            padding-left: 1.25rem;
+        }
+
+        .bento-box.large {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .datasheet-link {
+            display: inline-block;
+            margin-top: 0.75rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .datasheet-link:hover {
+            color: var(--accent-color);
+        }
+
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .bento-container {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 1.5rem;
+                padding: 2rem;
+            }
+
+            .bento-box {
+                padding: 1.5rem;
+            }
+
+            .bento-box h3 {
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+            }
+
+            .bento-box p, .bento-box ul {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+
+            .bento-box ul {
+                padding-left: 1.5rem;
+            }
+
+            .bento-box.large {
+                grid-template-columns: 2fr 1fr;
+                gap: 1.5rem;
+            }
+
+            .datasheet-link {
+                margin-top: 1rem;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .container {
+                padding: 0.5rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 1rem;
+            }
+
+            #transistorSelector {
+                font-size: 0.9rem;
+                padding: 0.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .bento-container {
+                padding: 0.5rem;
+            }
+
+            .bento-box {
+                padding: 0.75rem;
+            }
+
+            .bento-box h3 {
+                font-size: 1rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .bento-box p, .bento-box ul {
+                font-size: 0.85rem;
+                line-height: 1.3;
+            }
+
+            .bento-box ul {
+                padding-left: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="space-background" id="starsContainer"></div>
+    <div class="container">
+        <h1>Transistor</h1>
+        <select id="transistorSelector">
+            <option value="">Select a Transistor Type</option>
+            <option value="bjt">Bipolar Junction Transistor (BJT)</option>
+            <option value="mosfet">Metal-Oxide-Semiconductor Field-Effect Transistor (MOSFET)</option>
+            <option value="jfet">Junction Field-Effect Transistor (JFET)</option>
+            <option value="igbt">Insulated-Gate Bipolar Transistor (IGBT)</option>
+        </select>
+        <div id="transistorInfo" class="bento-container" style="display: none;">
+            <div class="bento-box large">
+                <div>
+                    <h3>Overview & Technical Specifications</h3>
+                    <p id="description"></p>
+                    <ul id="specification"></ul>
+                </div>
+                <div class="image-container" id="componentImage"></div>
+            </div>
+            <div class="bento-box">
+                <h3>Usage/Application</h3>
+                <p id="usage"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Standards/Manufacturers</h3>
+                <p id="standards"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Future Scope</h3>
+                <p id="futureScope"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Resources</h3>
+                <p>For detailed specifications, please refer to the datasheet:</p>
+                <a href="#" id="datasheetLink" class="datasheet-link" target="_blank" rel="noopener noreferrer">View Datasheet</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        const transistorData = {
+            bjt: {
+                description: "A Bipolar Junction Transistor (BJT) is a three-terminal semiconductor device that amplifies or switches electrical signals and power. It consists of two p-n junctions and three terminals: emitter, base, and collector.",
+                usage: "Amplification in audio and radio frequency circuits, switching in digital circuits, and voltage regulation.",
+                specification: [
+                    "Current gain (β or hFE): 20-1000",
+                    "Collector-Emitter voltage (VCEO): 20-100V",
+                    "Collector current (IC): 0.1-10A",
+                    "Power dissipation: 0.5-50W",
+                    "Transition frequency (fT): 50MHz-5GHz",
+                    "Input resistance: 600-1000Ω",
+                    "Output resistance: 50kΩ-5MΩ"
+                ],
+                standards: "Meets JEDEC standards. Major manufacturers include ON Semiconductor, STMicroelectronics, and NXP Semiconductors.",
+                futureScope: "Development of high-frequency BJTs for 5G and beyond, integration with advanced packaging techniques for improved thermal management.",
+                datasheet: "https://drive.google.com/file/d/1tFXOpFb4X0dXJlytKBzRDW_g8dcTI5RB/view",
+                image: "https://www.polytechnichub.com/wp-content/uploads/2017/04/bipolar-junction-transistor.jpg"
+            },
+            mosfet: {
+                description: "A Metal-Oxide-Semiconductor Field-Effect Transistor (MOSFET) is a voltage-controlled device with four terminals: source, gate, drain, and body. It uses an electric field to control the flow of current.",
+                usage: "Switching in digital circuits, voltage-controlled resistors, power management in mobile devices, and high-power applications in electric vehicles.",
+                specification: [
+                    "Threshold voltage (VTH): 0.5-4V",
+                    "Drain-Source breakdown voltage (BVDSS): 20-1000V",
+                    "On-resistance (RDS(on)): 1mΩ-10Ω",
+                    "Gate charge (Qg): 1-300nC",
+                    "Input capacitance (Ciss): 100-10000pF",
+                    "Transconductance (gm): 1-100 S",
+                    "Maximum drain current (ID): 1-500A"
+                ],
+                standards: "Complies with JEDEC and IPC standards. Key manufacturers include Infineon Technologies, Texas Instruments, and Vishay.",
+                futureScope: "Advancements in wide bandgap materials (GaN, SiC) for high-efficiency power MOSFETs, development of sub-5nm node MOSFETs for advanced logic circuits.",
+                datasheet: "https://drive.google.com/file/d/1Vi0htYVBKLbXjG4lAhBbvK-VC8a8r_RD/view",
+                image: "https://5.imimg.com/data5/ZL/HS/GT/SELLER-3157248/mosfet-transistor-500x500.jpg"
+            },
+            jfet: {
+                description: "A Junction Field-Effect Transistor (JFET) is a three-terminal semiconductor device where current flow is controlled by an electric field. It has a channel of semiconductor material and two terminals called source and drain.",
+                usage: "Low-noise amplifiers, voltage-controlled resistors, and constant current sources in analog circuits.",
+                specification: [
+                    "Pinch-off voltage (VP): 0.5-10V",
+                    "Drain-Source breakdown voltage (BVDS): 30-300V",
+                    "Transconductance (gm): 1-10 mS",
+                    "Input capacitance (Ciss): 2-10pF",
+                    "Noise figure: 0.5-2dB",
+                    "Maximum drain current (IDSS): 1-50mA",
+                    "On-resistance (rDS(on)): 10-1000Ω"
+                ],
+                standards: "Meets MIL-STD-750 and MIL-STD-883 standards. Major producers include InterFET, Linear Systems, and Central Semiconductor.",
+                futureScope: "Integration of JFETs in high-temperature and radiation-hardened applications, development of silicon carbide (SiC) JFETs for power electronics.",
+                datasheet: "https://drive.google.com/file/d/15iMAkz1Zwyk7qMPfycvLuWRyzvUv4hnh/view",
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqO2t47PxOWDQ8HKcLRlwimFcHG9Yc1CMvwQ&s"
+            },
+            igbt: {
+                description: "An Insulated-Gate Bipolar Transistor (IGBT) combines the high input impedance and gate drive characteristics of a MOSFET with the high current and low saturation voltage of a bipolar transistor.",
+                usage: "High-power applications such as variable frequency drives, electric vehicle motor controls, renewable energy inverters, and induction heating.",
+                specification: [
+                    "Collector-Emitter voltage (VCES): 600-6500V",
+                    "Continuous collector current (IC): 10-1200A",
+                    "Gate-Emitter threshold voltage (VGE(th)): 3-6V",
+                    "Collector-Emitter saturation voltage (VCE(sat)): 1.5-3V",
+                    "Turn-on delay time (td(on)): 100-500ns",
+                    "Turn-off delay time (td(off)): 200-1000ns",
+                    "Short circuit withstand time: 5-10μs"
+                ],
+                standards: "Complies with IEC 60747-9 standard. Key manufacturers include Infineon Technologies, Mitsubishi Electric, and Fuji Electric.",
+                futureScope: "Development of silicon carbide (SiC) IGBTs for ultra-high voltage applications, integration of current and temperature sensing features for smart power modules.",
+                datasheet: "https://drive.google.com/file/d/1D0M2rl1R-zEo3y7ShjyPlog2wdoLGpIk/view",
+                image: "data:image/jpeg;base64,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"
+            }
+        };
+
+        const transistorSelector = document.getElementById('transistorSelector');
+        const transistorInfo = document.getElementById('transistorInfo');
+
+        transistorSelector.addEventListener('change', function() {
+            const selectedTransistor = transistorSelector.value;
+            if (selectedTransistor) {
+                const data = transistorData[selectedTransistor];
+                document.getElementById('description').textContent = data.description;
+                document.getElementById('usage').textContent = data.usage;
+                document.getElementById('specification').innerHTML = data.specification.map(spec => `<li>${spec}</li>`).join('');
+                document.getElementById('standards').textContent = data.standards;
+                document.getElementById('futureScope').textContent = data.futureScope;
+                document.getElementById('componentImage').innerHTML = `<img src="${data.image}" alt="${selectedTransistor} Transistor">`;
+                document.getElementById('datasheetLink').href = data.datasheet;
+                transistorInfo.style.display = 'grid';
+            } else {
+                transistorInfo.style.display = 'none';
+            }
+        });
+
+        function createStars() {
+        const starsContainer = document.getElementById('starsContainer');
+        const starCount = 100;
+        const fragment = document.createDocumentFragment();
+
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.style.width = star.style.height = `${Math.random() * 3}px`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 2}s`;
+            fragment.appendChild(star);
+        }
+
+        starsContainer.appendChild(fragment);
+    }
+
+    createStars();
+</script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Capacitor Information Hub</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --primary-color: #3b82f6;
+            --secondary-color: #1e293b;
+            --accent-color: #f472b6;
+            --box-bg-color: rgba(30, 41, 59, 0.8);
+            --box-border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        #capacitorSelector {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            background-color: var(--box-bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--box-border-color);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233b82f6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em;
+        }
+
+        .bento-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background-color: var(--box-bg-color);
+            border-radius: 16px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .bento-box {
+            background-color: var(--secondary-color);
+            border: 1px solid var(--box-border-color);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .bento-box h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .bento-box p, .bento-box ul {
+            margin: 0;
+            line-height: 1.4;
+            font-size: 0.9rem;
+        }
+
+        .bento-box ul {
+            padding-left: 1.2rem;
+        }
+
+        .bento-box.large {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+        }
+
+        .datasheet-link {
+            display: inline-block;
+            margin-top: 0.5rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 1200px;
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .bento-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 1.5rem;
+                padding: 2rem;
+            }
+
+            .bento-box.large {
+                grid-column: 1 / -1;
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 1.5rem;
+                align-items: start;
+            }
+
+            .image-container {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="space-background" id="starsContainer"></div>
+    <div class="container">
+        <h1>Capacitor</h1>
+        <select id="capacitorSelector">
+            <option value="">Select a Capacitor Type</option>
+            <option value="ceramic">Ceramic Capacitor</option>
+            <option value="electrolytic">Electrolytic Capacitor</option>
+            <option value="tantalum">Tantalum Capacitor</option>
+            <option value="film">Film Capacitor</option>
+            <option value="supercapacitor">Supercapacitor</option>
+            <option value="mica">Mica Capacitor</option>
+            <option value="polymer">Polymer Capacitor</option>
+        </select>
+        <div id="capacitorInfo" class="bento-container" style="display: none;">
+            <div class="bento-box large">
+                <div>
+                    <h3>Overview & Technical Specifications</h3>
+                    <p id="description"></p>
+                    <ul id="specification"></ul>
+                </div>
+                <div class="image-container" id="componentImage"></div>
+            </div>
+            <div class="bento-box">
+                <h3>Applications</h3>
+                <p id="usage"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Standards & Manufacturers</h3>
+                <p id="standards"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Advantages</h3>
+                <p id="advantages"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Disadvantages</h3>
+                <p id="disadvantages"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Future Developments</h3>
+                <p id="futureScope"></p>
+            </div>
+            <div class="bento-box">
+                <h3>Resources</h3>
+                <p>For detailed specifications, please refer to the datasheet:</p>
+                <a href="#" id="datasheetLink" class="datasheet-link" target="_blank" rel="noopener noreferrer">View Datasheet</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        const capacitorData = {
+            ceramic: {
+                description: "Ceramic capacitors are non-polarized capacitors made from ceramic materials. They offer high stability, low losses, and are suitable for high-frequency applications.",
+                usage: "Used in high-frequency applications, coupling and decoupling, and filtering in various electronic circuits.",
+                specification: [
+                    "Capacitance: 1pF to 100µF",
+                    "Voltage rating: 16V to 3000V",
+                    "Temperature coefficient: X7R, C0G/NP0, Y5V, etc.",
+                    "Frequency range: Up to GHz range",
+                    "Operating temperature: -55°C to +125°C"
+                ],
+                standards: "Complies with AEC-Q200 for automotive applications. Key manufacturers include Murata, Kemet, TDK, and Vishay.",
+                advantages: "Small size, low cost, high stability, suitable for high-frequency applications.",
+                disadvantages: "Limited capacitance range, potential for microphonics in some types.",
+                futureScope: "Development of higher capacitance MLCCs and research into new dielectric materials for improved performance.",
+                datasheet: "https://drive.google.com/file/d/1LE_CWhK2XRdUgac3pwoL9rOllsI96bCa/view",
+                image: "/Capacitors/cer.jpeg"
+            },
+            electrolytic: {
+                description: "Electrolytic capacitors are polarized capacitors that use an electrolyte as one of their plates. They offer high capacitance values in relatively small packages.",
+                usage: "Used in power supply circuits, filtering applications, and energy storage in various electronic devices.",
+                specification: [
+                    "Capacitance: 0.1µF to 100,000µF",
+                    "Voltage rating: 6.3V to 600V",
+                    "Temperature range: -55°C to +150°C",
+                    "ESR: 0.01Ω to 10Ω",
+                    "Lifetime: 1,000 to 10,000 hours at rated temperature"
+                ],
+                standards: "Meets IEC 60384-4 standards. Major producers include Nichicon, Panasonic, Rubycon, and Cornell Dubilier.",
+                advantages: "High capacitance values, good price-to-performance ratio, suitable for low-frequency applications.",
+                disadvantages: "Polarized (can't be reversed), limited lifespan, higher ESR compared to other types.",
+                futureScope: "Advancements in ultra-low ESR electrolytic capacitors and development of hybrid electrolytic-polymer capacitors.",
+                datasheet: "https://drive.google.com/file/d/1a3B1jgVKtDz9wPDAaBcmPYLK_FOnu5kX/view",
+                image: "/Capacitors/al.jpg"
+            },
+            tantalum: {
+                description: "Tantalum capacitors are electrolytic capacitors that use tantalum metal as the anode. They offer high capacitance in a small volume and excellent stability.",
+                usage: "Used in applications requiring high reliability and stability, such as aerospace, military, and medical devices.",
+                specification: [
+                    "Capacitance: 0.1µF to 1000µF",
+                    "Voltage rating: 2.5V to 50V",
+                    "Temperature range: -55°C to +125°C",
+                    "ESR: 0.01Ω to 3Ω",
+                    "Lifetime: Up to 10,000 hours at rated temperature"
+                ],
+                standards: "Complies with MIL-PRF-55365 for military applications. Key manufacturers include KEMET, AVX, and Vishay.",
+                advantages: "High volumetric efficiency, stable electrical parameters, long life, low ESR.",
+                disadvantages: "Higher cost, limited voltage range, sensitivity to voltage spikes.",
+                futureScope: "Research into tantalum alternatives and development of polymer tantalum capacitors for improved performance.",
+                datasheet: "https://drive.google.com/file/d/1XeS8hnRtk9H-FGpVuFkgKwByxmH2ZKjd/view",
+                image: "/Capacitors/tan.jpg"
+            },
+            film: {
+                description: "Film capacitors are non-polarized capacitors made from plastic film dielectrics. They offer excellent stability and low losses.",
+                usage: "Used in power applications, timing circuits, signal coupling, and high-frequency applications.",
+                specification: [
+                    "Capacitance: 100pF to 100µF",
+                    "Voltage rating: 50V to 2000V",
+                    "Temperature range: -55°C to +125°C",
+                    "Frequency range: Up to MHz range",
+                    "Dissipation factor: <0.5%"
+                ],
+                standards: "Complies with IEC 60384-1. Major manufacturers include WIMA, EPCOS (TDK), and Kemet.",
+                advantages: "Low losses, high stability, self-healing properties, suitable for high-frequency applications.",
+                disadvantages: "Larger size compared to ceramic capacitors, limited capacitance range.",
+                futureScope: "Development of higher temperature film capacitors and research into biodegradable film materials.",
+                datasheet: "https://drive.google.com/file/d/1tFwBjQlm9G5PSFgjlWjSXUQ_8HWoCwft/view",
+                image: "/Capacitors/film.jpg"
+            },
+            supercapacitor: {
+                description: "Supercapacitors, also known as ultracapacitors, are high-capacity electrochemical capacitors with capacitance values much higher than other capacitor types.",
+                usage: "Used in energy storage, power delivery for electric vehicles, renewable energy systems, and backup power supplies.",
+                specification: [
+                    "Capacitance: 1F to 3000F",
+                    "Voltage rating: 2.3V to 5.5V (single cell)",
+                    "Energy density: 1-10 Wh/kg",
+                    "Power density: Up to 10,000 W/kg",
+                    "Cycle life: >500,000 cycles"
+                ],
+                standards: "Complies with IEC 62391 standards. Key manufacturers include Maxwell Technologies, Panasonic, and Skeleton Technologies.",
+                advantages: "Very high capacitance, rapid charge/discharge, long cycle life, high power density.",
+                disadvantages: "Lower energy density compared to batteries, higher self-discharge rate, voltage balancing required for series connection.",
+                futureScope: "Research into new electrode materials, development of hybrid supercapacitor-battery systems, and miniaturization for consumer electronics.",
+                datasheet:  "https://drive.google.com/file/d/16V-wzImuUCNZgBbk8lOQRvwKLYlOJ0Hi/view",
+                image: "/Capacitors/super.jpeg"
+            },
+           
+            mica: {
+                description: "Mica capacitors use mica as the dielectric. They offer excellent stability, low losses, and high-frequency performance.",
+                usage: "Used in high-frequency circuits, RF applications, and precision timing circuits.",
+                specification: [
+                    "Capacitance: 1pF to 0.1µF",
+                    "Voltage rating: 100V to 2500V",
+                    "Temperature coefficient: ±50 ppm/°C",
+                    "Frequency range: Up to GHz range",
+                    "Q factor: >1000 at 1MHz"
+                ],
+                standards: "Meets MIL-PRF-39001 for military applications. Manufacturers include Cornell Dubilier, Vishay, and AVX.",
+                advantages: "Excellent stability, low losses, high Q factor, suitable for high-frequency applications.",
+                disadvantages: "Higher cost, limited capacitance range, larger size compared to ceramic capacitors.",
+                futureScope: "Research into synthetic mica materials and development of mica capacitors for extreme environment applications.",
+                datasheet: "https://drive.google.com/file/d/181MkBNKZ6gFoKkWGunRFWQcQlVlsObCC/view",
+                image: "/Capacitors/mica.jpg"
+            },
+            polymer: {
+                description: "Polymer capacitors use a solid organic polymer as the electrolyte. They combine the high capacitance of electrolytic capacitors with the reliability of film capacitors.",
+                usage: "Used in power supply decoupling, DC-DC converters, and high-reliability applications in automotive and industrial electronics.",
+                specification: [
+                    "Capacitance: 2.2µF to 1000µF",
+                    "Voltage rating: 2.5V to 100V",
+                    "ESR: As low as 3mΩ",
+                    "Temperature range: -55°C to +125°C",
+                    "Lifetime: >10,000 hours at rated temperature"
+                ],
+                standards: "Meets AEC-Q200 for automotive applications. Key manufacturers include Panasonic, KEMET, and Vishay.",
+                advantages: "Very low ESR, high ripple current capability, long life, stable electrical parameters.",
+                disadvantages: "Higher cost compared to standard electrolytic capacitors, limited voltage range.",
+                futureScope: "Development of higher voltage polymer capacitors and research into new polymer materials for improved performance.",
+                datasheet: "https://drive.google.com/file/d/1RA-qietrFDFmV1mH3XOKkjsJKShzbl5B/view",
+                image: "/Capacitors/poly.jpg"
+            }
+        };
+
+        const capacitorSelector = document.getElementById('capacitorSelector');
+        const capacitorInfo = document.getElementById('capacitorInfo');
+
+        capacitorSelector.addEventListener('change', function() {
+            const selectedCapacitor = capacitorSelector.value;
+            if (selectedCapacitor) {
+                const data = capacitorData[selectedCapacitor];
+                document.getElementById('description').textContent = data.description;
+                document.getElementById('usage').textContent = data.usage;
+                document.getElementById('specification').innerHTML = data.specification.map(spec => `<li>${spec}</li>`).join('');
+                document.getElementById('standards').textContent = data.standards;
+                document.getElementById('advantages').textContent = data.advantages;
+                document.getElementById('disadvantages').textContent = data.disadvantages;
+                document.getElementById('futureScope').textContent = data.futureScope;
+                document.getElementById('componentImage').innerHTML = `<img src="${data.image}" alt="${selectedCapacitor} Capacitor">`;
+                document.getElementById('datasheetLink').href = data.datasheet;
+                capacitorInfo.style.display = 'grid';
+            } else {
+                capacitorInfo.style.display = 'none';
+            }
+        });
+
+        function createStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            const starCount = 100;
+            const fragment = document.createDocumentFragment();
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = star.style.height = `${Math.random() * 3}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                fragment.appendChild(star);
+            }
+
+            starsContainer.appendChild(fragment);
+        }
+
+        createStars();
+    </script>
+</body>
+</html>
